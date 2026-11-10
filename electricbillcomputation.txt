@@ -289,9 +289,21 @@ int main() {
 
     cout << fixed << setprecision(2);
 
+    // Welcome Message
+    cout << "\n" << DARK_GREEN << BOLD;
+    cout << "================================================================\n";
+    cout << RESET;
+    cout << "                    WELCOME TO BRAVE BILL\n";
+    cout << "                ELECTRICITY BILL COMPUTATION\n";
+    cout << DARK_GREEN << BOLD;
+    cout << "================================================================\n";
+    cout << RESET;
+    cout << endl;
+    cout << "       Manage and check your electricity bills with ease!\n\n";
+
     // Main Menu Loop
     do {
-        displayCenteredHeader("WELCOME TO BRAVE BILL", BLUE);
+        displayCenteredHeader("BRAVE BILL", BLUE);
 
         cout << "\nWho is using the program?" << endl;
         cout << "[1] Electrician" << endl;
@@ -470,4 +482,4 @@ int main() {
     cout << "\nProgram terminated." << endl;
 
     return 0;
-} 
+}
