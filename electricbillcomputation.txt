@@ -41,6 +41,7 @@ void displayCenteredHeader(string title, string color, char border = '=') {
 
 // 1. Void method: Displays consumption level and energy-saving tip
 void displayConsumptionTip(double kwh, string &level, string &tip) {
+
     if (kwh <= 100) {
         level = "Low";
         tip = "Great job! Your usage is very efficient. Keep it up!";
@@ -61,21 +62,27 @@ void displayConsumptionTip(double kwh, string &level, string &tip) {
 
 // 2. Method: Validates and gets the main menu choice
 int getMenuChoice() {
+
     int choice;
 
     while (true) {
+
         cout << "Enter your choice (1-3): ";
 
         if (cin >> choice) {
+
             if (choice >= 1 && choice <= 3) {
                 return choice;
             }
 
-            cout << RED << "Invalid choice! Please select only 1, 2, or 3."
+            cout << RED
+                 << "Invalid choice! Please select only 1, 2, or 3."
                  << RESET << endl;
         }
         else {
-            cout << RED << "Invalid input! Please enter a number."
+
+            cout << RED
+                 << "Invalid input! Please enter a number."
                  << RESET << endl;
 
             cin.clear();
@@ -84,23 +91,82 @@ int getMenuChoice() {
     }
 }
 
-// 3. Method: Validates positive integers
+// 3. Method: Validates and gets the selected month
+string getMonthChoice() {
+
+    string months[] = {
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    };
+
+    int choice;
+
+    while (true) {
+
+        displayCenteredHeader("MONTH SELECTION", DARK_GREEN);
+
+        cout << "\n";
+        cout << "  [1]  January       [7]  July\n";
+        cout << "  [2]  February      [8]  August\n";
+        cout << "  [3]  March         [9]  September\n";
+        cout << "  [4]  April         [10] October\n";
+        cout << "  [5]  May           [11] November\n";
+        cout << "  [6]  June          [12] December\n";
+
+        cout << "\n";
+
+        cout << DARK_GREEN << BOLD
+             << string(64, '=')
+             << RESET << endl;
+
+        cout << "Enter your choice (1-12): ";
+
+        if (cin >> choice) {
+
+            if (choice >= 1 && choice <= 12) {
+                return months[choice - 1];
+            }
+
+            cout << RED
+                 << "Invalid choice! Please select a month from 1-12."
+                 << RESET << endl;
+        }
+        else {
+
+            cout << RED
+                 << "Invalid input! Please enter a number."
+                 << RESET << endl;
+
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+}
+
+// 4. Method: Validates positive integers
 int getPositiveInt(string prompt) {
+
     int value;
 
     while (true) {
+
         cout << prompt;
 
         if (cin >> value) {
+
             if (value > 0) {
                 return value;
             }
 
-            cout << RED << "Invalid number! Please enter a positive number."
+            cout << RED
+                 << "Invalid number! Please enter a positive number."
                  << RESET << endl;
         }
         else {
-            cout << RED << "Invalid input! Please enter a whole number."
+
+            cout << RED
+                 << "Invalid input! Please enter a whole number."
                  << RESET << endl;
 
             cin.clear();
@@ -109,23 +175,29 @@ int getPositiveInt(string prompt) {
     }
 }
 
-// 4. Method: Validates electricity consumption
+// 5. Method: Validates electricity consumption
 double getNonNegativeDouble(string prompt) {
+
     double value;
 
     while (true) {
+
         cout << prompt;
 
         if (cin >> value) {
+
             if (isfinite(value) && value >= 0) {
                 return value;
             }
 
-            cout << RED << "Invalid kWh! Please enter a non-negative value."
+            cout << RED
+                 << "Invalid kWh! Please enter a non-negative value."
                  << RESET << endl;
         }
         else {
-            cout << RED << "Invalid input! Please enter a valid number."
+
+            cout << RED
+                 << "Invalid input! Please enter a valid number."
                  << RESET << endl;
 
             cin.clear();
@@ -134,23 +206,29 @@ double getNonNegativeDouble(string prompt) {
     }
 }
 
-// 5. Method: Validates electricity rate
+// 6. Method: Validates electricity rate
 double getPositiveDouble(string prompt) {
+
     double value;
 
     while (true) {
+
         cout << prompt;
 
         if (cin >> value) {
+
             if (isfinite(value) && value > 0) {
                 return value;
             }
 
-            cout << RED << "Invalid rate! Please enter a value greater than zero."
+            cout << RED
+                 << "Invalid rate! Please enter a value greater than zero."
                  << RESET << endl;
         }
         else {
-            cout << RED << "Invalid input! Please enter a valid number."
+
+            cout << RED
+                 << "Invalid input! Please enter a valid number."
                  << RESET << endl;
 
             cin.clear();
@@ -159,54 +237,79 @@ double getPositiveDouble(string prompt) {
     }
 }
 
-// 6. Method: Gets the customer's electricity rate
+// 7. Method: Gets the customer's electricity rate
 double getElectricityRate(bool &usedDefault) {
+
     string answer;
 
     while (true) {
+
         cout << "Do you know your rate per kWh? (y/n): ";
         cin >> answer;
 
         if (answer == "y" || answer == "Y") {
+
             usedDefault = false;
-            return getPositiveDouble("Enter your rate per kWh (PHP): ");
+
+            return getPositiveDouble(
+                "Enter your rate per kWh (PHP): "
+            );
         }
         else if (answer == "n" || answer == "N") {
+
             usedDefault = true;
+
             return DEFAULT_RATE;
         }
         else {
-            cout << RED << "Invalid answer! Please enter Y or N."
+
+            cout << RED
+                 << "Invalid answer! Please enter Y or N."
                  << RESET << endl;
         }
     }
 }
 
-// 7. Method: Computes and returns the estimated electricity bill
+// 8. Method: Computes and returns the estimated electricity bill
 double computeElectricBill(double kwh, double rate) {
     return kwh * rate;
 }
 
-// 8. Void method: Displays bill summary
+// 9. Void method: Displays bill summary with aligned totals
 void displayBillSummary(string title, string countLabel,
                         int count, double totalKwh,
-                        double totalEstimatedBill) {
+                        double totalEstimatedBill,
+                        const vector<string>& months) {
 
     displayCenteredHeader(title, BLUE);
 
-    cout << countLabel << " : " << count << endl;
-    cout << "Total Electricity Used     : " << totalKwh << " kWh" << endl;
+    cout << "\nBills Checked:\n";
+
+    for (int i = 0; i < months.size(); i++) {
+
+        cout << "Bill " << i + 1
+             << " - Month of " << months[i] << endl;
+    }
+
+    cout << left << setw(27) << countLabel << " : "
+         << right << count << endl;
+
+    cout << left << setw(27) << "Total Electricity Used" << " : "
+         << right << totalKwh << " kWh" << endl;
 
     cout << GREEN << BOLD
-         << "Total Estimated Bill       : PHP " << totalEstimatedBill
+         << left << setw(27) << "Total Estimated Bill" << " : PHP "
+         << right << totalEstimatedBill
          << RESET << endl;
 }
 
-// 9. Method: Validates Yes or No answers
+// 10. Method: Validates Yes or No answers
 bool getYesNo(string prompt) {
+
     string answer;
 
     while (true) {
+
         cout << prompt;
         cin >> answer;
 
@@ -217,17 +320,21 @@ bool getYesNo(string prompt) {
             return false;
         }
         else {
-            cout << RED << "Invalid answer! Please enter Y or N."
+
+            cout << RED
+                 << "Invalid answer! Please enter Y or N."
                  << RESET << endl;
         }
     }
 }
 
-// 10. Method: Gets the customer's complete name
+// 11. Method: Gets the customer's complete name
 string getCustomerName() {
+
     string name;
 
     while (true) {
+
         cout << "\nCustomer Name: ";
         getline(cin >> ws, name);
 
@@ -235,14 +342,15 @@ string getCustomerName() {
             return name;
         }
 
-        cout << RED << "Invalid name! Please enter a name."
+        cout << RED
+             << "Invalid name! Please enter a name."
              << RESET << endl;
     }
 }
 
-// 11. Method: Displays individual bill results
+// 12. Method: Displays individual bill results
 void displayBillResult(string name, int billNumber,
-                       double kwh, double rate,
+                       string month, double kwh, double rate,
                        double estimatedBill, string level,
                        string tip, bool usedDefault) {
 
@@ -252,6 +360,7 @@ void displayBillResult(string name, int billNumber,
     );
 
     cout << "Customer Name      : " << name << endl;
+    cout << "Month              : " << month << endl;
     cout << "Electricity used   : " << kwh << " kWh" << endl;
     cout << "Rate per kWh       : PHP " << rate << endl;
 
@@ -263,6 +372,7 @@ void displayBillResult(string name, int billNumber,
     cout << "Tip                : " << tip << endl;
 
     if (usedDefault) {
+
         cout << "Note: A default rate was used, so your actual bill may differ."
              << endl;
     }
@@ -270,12 +380,14 @@ void displayBillResult(string name, int billNumber,
 
 // MAIN PROGRAM
 int main() {
+
     int mainChoice;
     int numCustomers;
     int numBills;
 
     string nameOfBiller;
     string level, tip;
+    string month;
 
     double kwh, rate, estimatedBill;
 
@@ -293,16 +405,21 @@ int main() {
     cout << "\n" << DARK_GREEN << BOLD;
     cout << "================================================================\n";
     cout << RESET;
+
     cout << "                    WELCOME TO BRAVE BILL\n";
     cout << "                ELECTRICITY BILL COMPUTATION\n";
+
     cout << DARK_GREEN << BOLD;
     cout << "================================================================\n";
     cout << RESET;
+
     cout << endl;
+
     cout << "       Manage and check your electricity bills with ease!\n\n";
 
     // Main Menu Loop
     do {
+
         displayCenteredHeader("BRAVE BILL", BLUE);
 
         cout << "\nWho is using the program?" << endl;
@@ -316,6 +433,7 @@ int main() {
 
             // ELECTRICIAN MODE
             case 1: {
+
                 displayCenteredHeader("ELECTRICIAN MODE", BLUE);
 
                 numCustomers = getPositiveInt(
@@ -327,6 +445,9 @@ int main() {
                 vector<int> customerBillCounts(numCustomers, 0);
                 vector<double> customerTotalKwh(numCustomers, 0);
                 vector<double> customerTotalBills(numCustomers, 0);
+
+                // Store selected months separately for each customer
+                vector<vector<string>> customerMonths(numCustomers);
 
                 // Process multiple customers
                 for (int i = 0; i < numCustomers; i++) {
@@ -352,18 +473,29 @@ int main() {
                             DARK_GREEN, '-'
                         );
 
+                        // Select month
+                        month = getMonthChoice();
+
+                        // Store selected month
+                        customerMonths[i].push_back(month);
+
+                        // Get electricity consumption
                         kwh = getNonNegativeDouble(
                             "How many kWh did the customer use this month? "
                         );
 
+                        // Get electricity rate
                         rate = getElectricityRate(usedDefault);
 
+                        // Compute estimated bill
                         estimatedBill = computeElectricBill(kwh, rate);
 
+                        // Determine consumption level and tip
                         displayConsumptionTip(kwh, level, tip);
 
+                        // Display bill result
                         displayBillResult(
-                            customerNames[i], j, kwh, rate,
+                            customerNames[i], j, month, kwh, rate,
                             estimatedBill, level, tip, usedDefault
                         );
 
@@ -384,15 +516,23 @@ int main() {
                         BLUE, '-'
                     );
 
-                    cout << "Total Bills Checked: "
-                         << customerBillCounts[i] << endl;
+                    cout << "\nBills Checked:\n";
 
-                    cout << "Total Electricity Used: "
-                         << customerTotalKwh[i] << " kWh" << endl;
+                    for (int j = 0; j < customerMonths[i].size(); j++) {
+
+                        cout << "Bill " << j + 1
+                             << " - Month of " << customerMonths[i][j] << endl;
+                    }
+
+                    cout << left << setw(27) << "Total Bills Checked" << " : "
+                         << right << customerBillCounts[i] << endl;
+
+                    cout << left << setw(27) << "Total Electricity Used" << " : "
+                         << right << customerTotalKwh[i] << " kWh" << endl;
 
                     cout << GREEN << BOLD
-                         << "Total Estimated Bill: PHP "
-                         << customerTotalBills[i]
+                         << left << setw(27) << "Total Estimated Bill" << " : PHP "
+                         << right << customerTotalBills[i]
                          << RESET << endl;
                 }
 
@@ -400,13 +540,17 @@ int main() {
             }
 
             // REGULAR CUSTOMER MODE
-            case 2:
+            case 2: {
+
                 displayCenteredHeader("REGULAR CUSTOMER MODE", BLUE);
 
                 // Reset personal summary
                 validBills = 0;
                 totalKwh = 0;
                 totalEstimatedBill = 0;
+
+                // Store selected months
+                vector<string> checkedMonths;
 
                 // Get customer's name
                 nameOfBiller = getCustomerName();
@@ -424,18 +568,29 @@ int main() {
                         DARK_GREEN, '-'
                     );
 
+                    // Select month
+                    month = getMonthChoice();
+
+                    // Store selected month
+                    checkedMonths.push_back(month);
+
+                    // Get electricity consumption
                     kwh = getNonNegativeDouble(
                         "How many kWh did you use this month? "
                     );
 
+                    // Get electricity rate
                     rate = getElectricityRate(usedDefault);
 
+                    // Compute estimated bill
                     estimatedBill = computeElectricBill(kwh, rate);
 
+                    // Determine consumption level and tip
                     displayConsumptionTip(kwh, level, tip);
 
+                    // Display bill result
                     displayBillResult(
-                        nameOfBiller, i, kwh, rate,
+                        nameOfBiller, i, month, kwh, rate,
                         estimatedBill, level, tip, usedDefault
                     );
 
@@ -449,12 +604,18 @@ int main() {
                 displayBillSummary(
                     "PERSONAL BILL SUMMARY",
                     "Total Bills Checked",
-                    validBills, totalKwh, totalEstimatedBill
+                    validBills,
+                    totalKwh,
+                    totalEstimatedBill,
+                    checkedMonths
                 );
+
                 break;
+            }
 
             // EXIT
             case 3:
+
                 keepRunning = false;
 
                 cout << "\n" << GREEN
@@ -466,9 +627,15 @@ int main() {
 
         // Return to main menu or exit
         if (mainChoice == 1 || mainChoice == 2) {
+
+            cout << BLUE << BOLD
+                 << string(64, '=')
+                 << RESET << endl;
+
             if (!getYesNo(
                 "\nDo you want to go back to the main menu? (y/n): "
             )) {
+
                 keepRunning = false;
 
                 cout << "\n" << GREEN
